@@ -1,0 +1,94 @@
+html,
+body {
+  font-family: Arial, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #1a004a;
+  padding: 10px;
+}
+
+#acesso_usuario {
+  text-align: center;
+  font-size: 50px;
+  color: #fff;
+}
+
+#login {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+#usuario {
+  width: 240px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+#botaoLogin {
+  background: #45c5bf;
+  width: 70px;
+  height: 50px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#sala_chat {
+  display: none;
+}
+
+#chat {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+#message {
+  width: 560px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+#botaoChat {
+  background: #45c5bf;
+  width: 70px;
+  height: 50px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#lista_usuarios {
+  height: 554px;
+  width: 15%;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+form {
+  margin: 15px 0;
+}
+
+.messages {
+  width: 600px;
+  height: 400px;
+  margin: 20px 0;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+@media only screen and (max-device-width: 900px) {
+  /* .menu { width:100%; } */
+}

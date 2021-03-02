@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Node</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="acesso_usuario">
+      <p>ChatZUU</p>
+      <form id="login">
+        <input
+          type="text"
+          name="usuario"
+          id="usuario"
+          autocomplete="off"
+          placeholder="Digite o seu Usuário"
+        />
+        <button id="botaoLogin" type="submit">Entrar</button>
+      </form>
+    </div>
+    <div id="sala_chat">
+      <ul id="lista_usuarios"></ul>
+      <form id="chat">
+        <div class="messages"></div>
+        <input
+          type="text"
+          name="message"
+          id="message"
+          autocomplete="off"
+          placeholder="Digite a sua mensagem"
+        />
+        <button id="botaoChat" type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <script type="text/javascript">
+      var socket = io("http://localhost:3000");
+
+      // Funcao que constroi a mensagem do client
+      function renderMessage(message) {
+        $(".messages")
+          .append(
+            "<div class='message' style='float: right;'><strong>" +
+              message.usuario +
+              "</strong>: " +
+              message.message +
+              "</div><br/></br>"
+          )
+          .scrollTop($(".messages")[0].scrollHeight);
+      }
+
+      // Funcao que constroi a mensagem do server
+      function renderMessageServer(message) {
+        $(".messages")
+          .append(
+            "<div class='message' style='float: left;'><strong>" +
+              message.usuario +
+              "</strong>: " +
+              message.message +
+              "</div><br/></br>"
+          )
+          .scrollTop($(".messages")[0].scrollHeight);
+      }
+
+      // Metodo de visualizar mensagens anteriores
+      socket.on("previousMessage", function (messages) {
+        for (message of messages) {
+          renderMessage(message);
+        }
+      });
+
+      // Recebe a mensagem de retorno do servidor
+      socket.on("receivedMessage", function (message) {
+        renderMessageServer(message);
+      });
+
+      // Metodo que atuliza a lista de usuarios conectados
+      socket.on("UpdateUser", function (usuarios) {
+        $("#lista_usuarios").empty();
+        $("#lista_usuarios").append(
+          "<ul style='font-weight: 900;'>Usuários</ul><br/>"
+        );
+
+        $.each(usuarios, function (indice) {
+          var opcao_usuario = $("<li class='c-list__item'></li>").text(
+            usuarios[indice]
+          );
+          $("#lista_usuarios").append(opcao_usuario);
+        });
+      });
+
+      // Metodo de Envio de mensagens
+      $("#chat").submit(function (event) {
+        event.preventDefault();
+
+        var usuario = $("input[name=usuario]").val();
+        var message = $("input[name=message]").val();
+        var campo = document.getElementById("message");
+
+        if (usuario.length && message.length) {
+          var messageObject = {
+            usuario: usuario,
+            message: message,
+          };
+
+          renderMessage(messageObject);
+
+          socket.emit("sendMessage", messageObject);
+
+          if (campo != length) {
+            campo.value = "";
+          }
+        }
+      });
+
+      // Metodo para a pagina de login chamar a sala do chat
+      $("#login").submit(function (event) {
+        event.preventDefault();
+
+        socket.emit(
+          "entrar",
+          $(this).find("#usuario").val(),
+          function (valido) {
+            if (valido) {
+              $("#acesso_usuario").hide();
+              $("#sala_chat").show();
+            } else {
+              $("#acesso_usuario").val("");
+              alert("Nome já utilizado na sala");
+            }
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
