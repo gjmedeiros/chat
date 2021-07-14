@@ -1,6 +1,6 @@
 # Chat
 
-Projeto de um Chat, desenvolvido com Html, Css, JavaScript, NodeJs e Express Js
+Projeto de um Chat, desenvolvido com Html-Css-JavaScript, Socket.IO, NodeJs e Express Js
 
 ## Como rodar o projeto
 
